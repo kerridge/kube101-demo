@@ -1,0 +1,36 @@
+replicaCount: 1
+strategy: Recreate
+
+# Docker Image location and Image Pull Policy
+image:
+  repository: samkedge/go-app
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart version.
+  tag: ""
+
+containers:
+  name: go-app-container
+  port: 9090
+
+# Health & Readiness checks
+livenessProbe:
+  path: /health
+  port: 9090
+  scheme: HTTP
+  checkInterval: 25 # seconds
+  
+readinessProbe:
+  path: /ready
+  port: 9090
+  scheme: HTTP
+
+nameOverride: ""
+fullnameOverride: ""
+
+podAnnotations: {}
+
+service:
+  type: NodePort
+  name: http
+  port: 8080
+  targetPort: 9090

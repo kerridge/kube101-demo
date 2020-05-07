@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "my-go-app.fullname" . }}
+
+spec:
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: {{ .Values.strategy }}
+  selector:
+    matchLabels:
+{{ include "my-go-app.selectorLabels" . | indent 6 }}
+
+  template:
+    metadata:
+      labels:
+{{ include "my-go-app.selectorLabels" . | indent 8 }}
+
+    spec:
+      containers:
+        - name: {{ .Values.containers.name }}
+          image: {{ .Values.image.repository }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.containers.port }}
+
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.livenessProbe.path }}
+              port: {{ .Values.livenessProbe.port }}
+              scheme: {{ .Values.livenessProbe.scheme }}
+            initialDelaySeconds: 5
+            periodSeconds: {{ .Values.livenessProbe.checkInterval }}
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.readinessProbe.path }}
+              port: {{ .Values.readinessProbe.port }}
+              scheme: {{ .Values.readinessProbe.scheme }}
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
