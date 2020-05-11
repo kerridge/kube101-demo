@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service                      # Type of kubernetes resource
+metadata:
+    name: my-go-service            # Name of the resource
+spec:
+    type: NodePort                 # A port is opened on each node in your cluster via Kube proxy.
+    ports:                         # Take incoming HTTP requests on port 8080 and forward them to the targetPort of 9090
+    - name: http
+      port: 8080                   # The port to open on the Node to allow incoming traffic
+      targetPort: 9090             # The port on the actual application itself - pod port
+    selector:
+        app: go-app                # Map any pod with label `app=go-app` to this service

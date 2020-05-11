@@ -24,11 +24,6 @@ readinessProbe:
   port: 9090
   scheme: HTTP
 
-nameOverride: ""
-fullnameOverride: ""
-
-podAnnotations: {}
-
 service:
   type: NodePort
   name: http

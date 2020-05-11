@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-go-app
+spec:
+  replicas: 1 # how many replica pods to spin up
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: go-app
+  # define labels so our service can find the deployment
+  template:
+    metadata:
+      labels:
+        app: go-app
+    spec:
+      containers:
+      - name: go-app-container
+        image: samkedge/go-app   # location of the image
+        imagePullPolicy: Always  # how often should we pull the image on pod restart
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 9090    # port of the container/app to open
+        livenessProbe:           # To check the health of the Pod
+          httpGet:
+            path: /health
+            port: 9090
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 15      # how often to health check the pod
+          timeoutSeconds: 5
+        readinessProbe:          # To check if the Pod is ready to serve traffic or not
+          httpGet:
+            path: /ready
+            port: 9090
+            scheme: HTTP
+          initialDelaySeconds: 5
+          timeoutSeconds: 1 

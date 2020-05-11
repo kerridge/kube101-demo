@@ -20,7 +20,7 @@ func readiness(w http.ResponseWriter, r *http.Request) {
 // Our homepage
 func index(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Weeeeeeeelcome hooooooome, from the bottom of my heart")
-	fmt.Fprintf(w, "<h1>Hello, World</h1>")
+	fmt.Fprintf(w, "<h1>Hello, Dude</h1>")
 }
 
 func main() {
